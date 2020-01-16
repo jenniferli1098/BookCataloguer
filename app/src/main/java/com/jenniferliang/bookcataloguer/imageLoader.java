@@ -16,6 +16,7 @@ import java.net.URL;
 
 public class imageLoader extends JobIntentService {
 
+    String TAG = "imageLoader";
     public static final int JOB_ID = 1023;
 
 
@@ -27,6 +28,7 @@ public class imageLoader extends JobIntentService {
         //set up things
 
         String coverUrl = intent.getStringExtra("coverUrl");
+        Log.d(TAG,coverUrl);
         Bitmap bmp = null;
         try{
         URL url = new URL(coverUrl);
@@ -41,9 +43,16 @@ public class imageLoader extends JobIntentService {
         Log.d("BROADCAST", "sending broadcast");
 
         Intent _intent = new Intent();
-        intent.putExtras(b);
+        _intent.putExtras(b);
+        _intent.setAction("picture");
         sendBroadcast(_intent);
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"=====imageLoader onDestroy======");
     }
 }

@@ -51,7 +51,6 @@ public class SearchBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString("functionName", "search");
                 String title = titleField.getText().toString();
                 String author = authorField.getText().toString();
                 if(title.equals("") && author.equals("")) {

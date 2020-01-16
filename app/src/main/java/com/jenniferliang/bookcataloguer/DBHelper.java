@@ -70,13 +70,22 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public int deleteBook(int user_id, String isbn) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Define 'where' part of query.
+        String selection = BOOKS_COLUMN_USER_ID + "=" + user_id + " AND "+BOOKS_COLUMN_ISBN+"="+isbn;
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { BOOKS_COLUMN_TITLE };
+        // Issue SQL statement.
+        return db.delete(BOOKS_TABLE_NAME, selection, selectionArgs);
+    }
+
     public Cursor getUser(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         String select = USERS_COLUMN_USERNAME + " = '" + username + "'";
         Cursor res;
         try {
-             res = db.query(USERS_TABLE_NAME, new String[]{USERS_COLUMN_ID, USERS_COLUMN_USERNAME,
-                            USERS_COLUMN_PASSWORD}, select,
+             res = db.query(USERS_TABLE_NAME, null, select,
                     null, null, null, null);
         }catch(Exception e){
             return null;
@@ -90,7 +99,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String select = BOOKS_COLUMN_USER_ID + "=" + user_id;
         Cursor res;
         try {
-            res = db.query(BOOKS_TABLE_NAME, new String[]{BOOKS_COLUMN_TITLE, BOOKS_COLUMN_AUTHOR, BOOKS_COLUMN_ISBN,BOOKS_COLUMN_COVERURL,BOOKS_COLUMN_PUBLISHDATE}, select,
+            res = db.query(BOOKS_TABLE_NAME, null, select,
                     null, null, null, null);
         }catch(Exception e){
             return null;
@@ -104,7 +113,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String select = BOOKS_COLUMN_USER_ID + "=" + user_id + " AND "+BOOKS_COLUMN_ISBN+"="+isbn;
         Cursor res;
         try {
-            res = db.query(BOOKS_TABLE_NAME, new String[]{BOOKS_COLUMN_TITLE, BOOKS_COLUMN_AUTHOR, BOOKS_COLUMN_ISBN,BOOKS_COLUMN_COVERURL,BOOKS_COLUMN_PUBLISHDATE}, select,
+            res = db.query(BOOKS_TABLE_NAME, null, select,
                     null, null, null, null);
         }catch(Exception e){
             return false;

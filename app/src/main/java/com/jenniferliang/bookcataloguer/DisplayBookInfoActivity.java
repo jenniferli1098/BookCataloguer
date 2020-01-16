@@ -64,7 +64,7 @@ public class DisplayBookInfoActivity extends AppCompatActivity {
         String title = getBundleString(bundle,"title","Title");
         String author = getBundleString(bundle,"author","Author");
         String publish = getBundleString(bundle,"publishDate","Published: ");
-        String isbn = getBundleString(bundle,"isbn","");
+        final String isbn = getBundleString(bundle,"isbn","");
         String coverUrl = getBundleString(bundle,"coverUrl","");
 
         titleTV.setText(title);
@@ -84,12 +84,13 @@ public class DisplayBookInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(addBtn.getText().toString().equals("Remove")){
                     //remove book from db
+                    mydb.deleteBook(id,isbn);
                     addBtn.setText("Add");
-                    bundle.putInt("user_id",id);
-                    mydb.insertBook(bundle);
 
                 }else{
                     //add book to db
+                    bundle.putInt("user_id",id);
+                    mydb.insertBook(bundle);
                     addBtn.setText("Remove");
 
                 }
@@ -122,12 +123,12 @@ public class DisplayBookInfoActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             try {
-                Log.d("TAG", " receiving picture");
+                Log.d(TAG, " receiving picture");
+                String intentAction = intent.getAction();
+                Log.d(TAG, " onReceive=" + intentAction);
 
                 Bitmap bmp = intent.getExtras().getParcelable("BitmapImage");
                 imageView.setImageBitmap(bmp);
-
-
 
             }
             catch (Exception e){}

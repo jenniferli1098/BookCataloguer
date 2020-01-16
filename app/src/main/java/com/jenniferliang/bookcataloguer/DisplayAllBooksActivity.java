@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -15,17 +16,24 @@ import java.util.List;
 
 public class DisplayAllBooksActivity extends AppCompatActivity {
 
+    int id;
+
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
 
     private List<ListItem> listItemList;
+    private List<String> isbns;
     Context mContext;
+
+    DBHelper mydb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_books);
 
+        id = getIntent().getIntExtra("id",0);
+        mydb = new DBHelper(this);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -33,52 +41,32 @@ public class DisplayAllBooksActivity extends AppCompatActivity {
 
         listItemList = new ArrayList<>();
 
+
         mContext = this.getApplicationContext();
 
 
-        for(int i = 0; i < 10; i++) {
-            ListItem listItem = new ListItem(
-                    "heading "+i,
-                    "Lorem ipsum dummy text"
-            );
-            listItemList.add(listItem);
+        Cursor cursor = mydb.getBooks(id);
+
+        if(cursor.getCount()>0) {
+            while (cursor.moveToNext()) {
+                String title = cursor.getString(
+                        cursor.getColumnIndexOrThrow("title"));
+                String author = cursor.getString(
+                        cursor.getColumnIndexOrThrow("author"));
+                String isbn = cursor.getString(
+                        cursor.getColumnIndexOrThrow("isbn"));
+                Log.d("tag",title);
+                listItemList.add(new ListItem(title, author));
+                isbns.add(isbn);
+
+            }
         }
+        cursor.close();
+
+
         adapter = new MyAdapter(listItemList, this);
 
         recyclerView.setAdapter(adapter);
     }
 
-    private class MyReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                String intentAction = intent.getAction();
-                Log.d("TAG", " onReceive=" + intentAction);
-                if (intentAction.equalsIgnoreCase("searchResults")) {
-
-                    //String value = intent.getExtras().getString("open_now");
-                    //TextView tv = findViewById(R.id.openinghours);
-                    //tv.setText(value);
-                    //load
-                    Bundle b = intent.getExtras();
-                    ArrayList<String> titles = b.getStringArrayList("titles");
-                    ArrayList<String> authors = b.getStringArrayList("authors");
-                    ArrayList<String> isbns = b.getStringArrayList("isbns");
-
-                    listItemList.clear();
-                    for(int i = 0; i < titles.size(); i++) {
-                        listItemList.add(new ListItem(titles.get(i), authors.get(i)));
-                    }
-
-
-                    adapter.notifyDataSetChanged();
-                    Log.d("TAG", "Change in list is notified");
-
-
-                }
-
-            }
-            catch (Exception e){}
-        }
-    }
 }

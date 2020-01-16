@@ -29,8 +29,6 @@ public class bookAPIHandler extends JobIntentService {
     private final static String TAG = "bookAPIHandler";
 
 
-    String functionName;
-
     static public void enqueueWork(Context context, Intent work) {
         mContext = context;
         enqueueWork(context, bookAPIHandler.class, JOB_ID, work);
@@ -43,7 +41,6 @@ public class bookAPIHandler extends JobIntentService {
         try {
             //DCLog.d("HttpSenderHandler Cell signal = " + String.valueOf(Connectivity.getSignalStrength(mContext)));
             Bundle bundle = intent.getExtras();
-            functionName = getBundleString(bundle, "functionName", "");
             Hashtable<String, String> input = new Hashtable<String, String>();
                 input.put("author", getBundleString(bundle, "author", ""));
                 input.put("title", getBundleString(bundle, "title", ""));
@@ -98,9 +95,9 @@ public class bookAPIHandler extends JobIntentService {
             //sending broadcast
             Bundle b = new Bundle();
 
-            b.putString("isbns", isbn);
-            b.putString("titles", title);
-            b.putString("authors", author);
+            b.putString("isbn", isbn);
+            b.putString("title", title);
+            b.putString("author", author);
 
             urlStr = "https://openlibrary.org/api/volumes/brief/isbn/"+isbn+".json";
 
@@ -136,7 +133,7 @@ public class bookAPIHandler extends JobIntentService {
             b.putString("publishDate", publishDate);
 
             Log.d(TAG, "sending broadcast");
-            sendBroadcast("bookinfo", b);
+            sendBroadcast("searchResults", b);
 
 
 
