@@ -18,6 +18,8 @@ public class DisplayAllBooksActivity extends AppCompatActivity {
 
     int id;
 
+    String TAG = "DisplayAllBooksActivity";
+
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
 
@@ -40,7 +42,7 @@ public class DisplayAllBooksActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         listItemList = new ArrayList<>();
-
+        isbns = new ArrayList<>();
 
         mContext = this.getApplicationContext();
 
@@ -55,7 +57,7 @@ public class DisplayAllBooksActivity extends AppCompatActivity {
                         cursor.getColumnIndexOrThrow("author"));
                 String isbn = cursor.getString(
                         cursor.getColumnIndexOrThrow("isbn"));
-                Log.d("tag",title);
+                Log.d(TAG,title+isbn);
                 listItemList.add(new ListItem(title, author));
                 isbns.add(isbn);
 
@@ -64,7 +66,7 @@ public class DisplayAllBooksActivity extends AppCompatActivity {
         cursor.close();
 
 
-        adapter = new MyAdapter(listItemList, this);
+        adapter = new MyAdapter(listItemList,isbns, id, this);
 
         recyclerView.setAdapter(adapter);
     }

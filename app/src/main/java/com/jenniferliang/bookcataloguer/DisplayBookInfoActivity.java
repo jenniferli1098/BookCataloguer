@@ -39,7 +39,7 @@ public class DisplayBookInfoActivity extends AppCompatActivity {
 
     Context mContext;
 
-
+    Bundle bundle;
     DBHelper mydb;
 
     @Override
@@ -60,13 +60,14 @@ public class DisplayBookInfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getIntExtra("id",0);
 
-        final Bundle bundle = intent.getExtras();
+        bundle = intent.getExtras();
         String title = getBundleString(bundle,"title","Title");
         String author = getBundleString(bundle,"author","Author");
         String publish = getBundleString(bundle,"publishDate","Published: ");
         final String isbn = getBundleString(bundle,"isbn","");
         String coverUrl = getBundleString(bundle,"coverUrl","");
 
+        Log.d(TAG,"isbn: "+isbn);
         titleTV.setText(title);
         authorTV.setText(author);
         publishDateTV.setText(publish);
@@ -89,8 +90,7 @@ public class DisplayBookInfoActivity extends AppCompatActivity {
 
                 }else{
                     //add book to db
-                    bundle.putInt("user_id",id);
-                    mydb.insertBook(bundle);
+                    mydb.insertBook(id, bundle);
                     addBtn.setText("Remove");
 
                 }

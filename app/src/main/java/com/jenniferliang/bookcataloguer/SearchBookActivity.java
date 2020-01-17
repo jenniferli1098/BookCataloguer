@@ -53,8 +53,8 @@ public class SearchBookActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 String title = titleField.getText().toString();
                 String author = authorField.getText().toString();
-                if(title.equals("") && author.equals("")) {
-                    Toast.makeText(mContext, "Please enter a title or author",
+                if(title.equals("")) {
+                    Toast.makeText(mContext, "Please enter a title",
                             Toast.LENGTH_LONG).show();
                     return;
                 }

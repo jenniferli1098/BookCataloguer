@@ -36,8 +36,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS users");
-        db.execSQL("DROP TABLE IF EXISTS books");
         db.execSQL("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)");
         db.execSQL("CREATE TABLE IF NOT EXISTS books (id INTEGER PRIMARY KEY, title TEXT, author TEXT," +
                 " isbn TEXT, user_id INTEGER, coverUrl TEXT, publishDate TEXT)");
@@ -57,12 +55,12 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert(USERS_TABLE_NAME, null, contentValues);
         return true;
     }
-    public boolean insertBook (Bundle bundle) {
+    public boolean insertBook (int user_id, Bundle bundle) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BOOKS_COLUMN_TITLE, bundle.getString("title"));
         contentValues.put(BOOKS_COLUMN_AUTHOR, bundle.getString("author"));
-        contentValues.put(BOOKS_COLUMN_USER_ID, bundle.getInt("user_id",0));
+        contentValues.put(BOOKS_COLUMN_USER_ID, user_id);
         contentValues.put(BOOKS_COLUMN_ISBN, bundle.getString("isbn"));
         contentValues.put(BOOKS_COLUMN_COVERURL,bundle.getString("coverUrl"));
         contentValues.put(BOOKS_COLUMN_PUBLISHDATE,bundle.getString("publishDate"));
@@ -120,5 +118,19 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return res.getCount()>0;
+    }
+
+    public Cursor getBook(int user_id, String isbn) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String select = BOOKS_COLUMN_USER_ID + "=" + user_id + " AND "+BOOKS_COLUMN_ISBN+"="+isbn;
+        Cursor res;
+        try {
+            res = db.query(BOOKS_TABLE_NAME, null, select,
+                    null, null, null, null);
+        }catch(Exception e){
+            return null;
+        }
+
+        return res;
     }
 }

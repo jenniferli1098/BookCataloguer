@@ -8,24 +8,25 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:padding="@dimen/fab_margin"
-            android:orientation="vertical"
+            android:id="@+id/LinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/fab_margin">
 
             <TextView
                 android:id="@+id/viewtitle"
-                android:text="Title"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <TextView
                 android:id="@+id/viewauthor"
-                android:text="Author"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Author"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         </LinearLayout>
 
